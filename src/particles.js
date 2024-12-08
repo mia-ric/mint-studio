@@ -1,13 +1,19 @@
 
 class Particle {
     /**
+     * Current Particle Stack
+     */
+    static stack = [];
+
+    /**
      * Create a new Particle instance
      */
     constructor() {
+        Particle.stack.push(this);
+
         this.position = p5.Vector.random2D().mult(20);
         this.velocity = createVector(0, 0);
         this.accuracy = this.position.copy().mult(random(0.0005, 0.00001));
-
         this.width = random(3, 5);
     }
 

@@ -1,11 +1,9 @@
 var recorder = null;
-
 var audio;
 var fontNormal;
 var fontMedium;
 
 var fft;
-var particles = [];
 var colors = {}
 var currentColor = 'primary';
 var usedColor =  null;
@@ -32,7 +30,7 @@ var colorTimeStamps = [
  */
 function preload() {
     /** SoundFile */
-    //audio = loadSound('assets/media/demo.wav');
+    audio = loadSound('assets/media/demo.wav');
 
     // Load Fonts
     fontNormal = loadFont('assets/fonts/agencyfb_regular.ttf');
@@ -49,48 +47,34 @@ function preload() {
  * Setup Script
  */
 function setup() {
-    audio = select('audio').elt;
-    audio.loop = false;
-    audio.muted = false;
-    audio.volume = 1.0;
-
-    // Prepare
     createCanvas(RECORDING ? RECORDING_WIDTH : windowWidth, RECORDING ? RECORDING_HEIGHT : windowHeight);
     frameRate(FRAMES);
     angleMode(DEGREES);
 
-    // Initialize Recorder instance
-    if (RECORDING) {
-        const canvasStream = select('canvas').elt.captureStream(FRAMES);
-        const audioStream = audio.captureStream(FRAMES);
-
-        const mediaStream = new MediaStream([
-            ...canvasStream.getVideoTracks(),
-            ...audioStream.getAudioTracks(),
-        ]);
-
-        recorder = new Recorder(mediaStream, FRAMES);
-        audio.addEventListener('play', async () => {
-            if (recorder.state == 'paused') {
-                await recorder.resume();
-            } else {
-                await recorder.start();
-            }
-        });
-        audio.addEventListener('pause', async () => {
-            if (audio.currentTime < audio.duration) {
-                await recorder.pause();
-            }
-        });
-        audio.addEventListener('ended', async () => {
-            await recorder.stop();
-            await recorder.download();
-        });
-    }
-
     // Analyse frequency spectrum and waveform of sounds
     //@see https://p5js.org/reference/p5.sound/p5.FFT/
     fft = new p5.FFT();
+
+    // Initialize Recorder instance
+    if (RECORDING) {
+        const canvasStream = select('canvas').elt.captureStream(FRAMES);
+        const audioContext = getAudioContext();
+        const audioStream = audioContext.createMediaStreamDestination();
+        audio.connect(audioStream);
+
+        const mediaStream = new MediaStream([
+            ...canvasStream.getVideoTracks(),
+            ...audioStream.stream.getAudioTracks(),
+        ]);
+
+        recorder = new Recorder(mediaStream, FRAMES);
+        audio.onended(async () => {
+            if (parseInt(audio.currentTime()) >= parseInt(audio.duration())) {
+                await recorder.stop();
+                await recorder.download();
+            }
+        });
+    }
 }
 
 /**
@@ -132,7 +116,7 @@ function draw() {
     strokeWeight(3);
 
     // Color
-    let time = parseFloat(audio.currentTime.toFixed(1));
+    let time = parseFloat(audio.currentTime().toFixed(1));
     let from = colors[currentColor];
     let to = null;
     let pct = null;
@@ -154,7 +138,7 @@ function draw() {
 
     // Line
     stroke(usedColor);
-    let duration = parseFloat(audio.duration.toFixed(1));
+    let duration = parseFloat(audio.duration().toFixed(1));
     let lineWidth = map(time, 0, duration, 0, width);
     line(0, 3, lineWidth, 3);
 
@@ -162,18 +146,19 @@ function draw() {
     translate(width, height);
     
     // Render Particles
-    if (!audio.paused) {
-        particles.push(new Particle());
+    if (audio.isPlaying()) {
+        new Particle;
     }
-
-    for (let i = particles.length - 1; i >= 0; i--) {
-        if (particles[i].edges()) {
-            particles.splice(1, i);
+    
+    for (let i = Particle.stack.length - 1; i >= 0; i--) {
+        let particle = Particle.stack[i];
+        if (particle.edges()) {
+            Particle.stack.splice(1, i);
         } else {
-            if (!audio.paused) {
-                particles[i].update(amp > 170);
+            if (audio.isPlaying()) {
+                particle.update(amp > 170);
             }
-            particles[i].render();
+            particle.render();
         }
     }
 
@@ -213,9 +198,21 @@ async function mouseClicked(ev) {
         return;
     }
 
-    if (!audio.paused) {
+    if (audio.isPlaying()) {
+        if (RECORDING && recorder.state == 'recording') {
+            if (audio.currentTime() < audio.duration()) {
+                await recorder.pause();
+            }
+        }
         await audio.pause();
     } else {
+        if (RECORDING) {
+            if (recorder.state == 'paused') {
+                await recorder.resume();
+            } else {
+                await recorder.start();
+            }
+        }
         await audio.play();
     }
 }
