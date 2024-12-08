@@ -4,16 +4,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>WaveForm Generator</title>
+    <title>WaveFormStudio</title>
 
     <link rel="stylesheet" type="text/css" href="style.css">
 
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
-    <script src="libraries/p5.recording.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@latest/dist/ffmpeg.min.js"></script>
 </head>
-
 <body>
-    <script src="sketch.js"></script>
+    <audio src="assets/media/demo.wav" type="audio/wav"></audio>
+
+    <script src="config.js"></script>
+    <script src="src/functions.js"></script>
+    <script src="src/particles.js"></script>
+    <script src="src/recorder.js"></script>
+    <script src="src/sketch.js"></script>
 </body>
 </html>
