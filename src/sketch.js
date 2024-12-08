@@ -31,7 +31,7 @@ var colorTimeStamps = [
  */
 function preload() {
     /** SoundFile */
-    audio = loadSound('assets/media/demo.wav');
+    audio = loadSound('assets/media/' + AUDIO_FILE);
 
     // Load Fonts
     fontNormal = loadFont('assets/fonts/agencyfb_regular.ttf');

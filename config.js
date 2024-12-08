@@ -10,6 +10,11 @@ const DEBUG = true;
 const FRAMES = 30;
 
 /**
+ * Audio File to Record
+ */
+const AUDIO_FILE = '1.00_prolog.mp3';
+
+/**
  * Recording Mode
  */
 const RECORDING = true;

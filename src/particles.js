@@ -49,7 +49,7 @@ class Particle {
     }
 
     /**
-     * Calculate if the particle is still within the viewport
+     * Calculate if the particle is still visible (within the viewport + opacity > 0)
      * @returns 
      */
     visible() {
@@ -60,7 +60,7 @@ class Particle {
     }
 
     /**
-     * Update Particle
+     * Update Particle position
      * @param {boolean} faster True to move a bit faster.
      */
     update(faster) {
