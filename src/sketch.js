@@ -1,30 +1,18 @@
 var recorder = null;
+var fft = null;
+
+// Assets
 var audio;
 var fontNormal;
 var fontMedium;
+
+// Scene Details
 var endScene = false;
-
-var fft;
 var colors = {}
-var currentColor = 'primary';
-var usedColor =  null;
+var colorCurrent = 'primary';
+var colorUsed =  null;
+var colorTimeStamps = getTimestamps();
 
-var colorTimeStamps = [
-    [169.0, 170.0, 'karai'],
-    [178.0, 179.0, 'primary'],
-    [193.0, 194.0, 'karai'],
-    [203.0, 204.0, 'primary'],
-    [215.0, 216.0, 'karai'],
-    [221.0, 222.0, 'primary'],
-    [269.0, 270.0, 'karai'],
-    [273.0, 274.0, 'primary'],
-    [343.0, 344.0, 'ninja'],
-    [346.0, 347.0, 'primary'],
-    [349.0, 350.0, 'karai'],
-    [356.0, 357.0, 'primary'],
-    [360.0, 361.0, 'karai'],
-    [366.0, 367.0, 'primary'],
-];
 
 /**
  * Preload Script
@@ -38,7 +26,7 @@ function preload() {
     fontMedium = loadFont('assets/fonts/agencyfb_bold.ttf');
 
     // Handle Colors
-    usedColor = color(0, 0, 0);
+    colorUsed = color(0, 0, 0);
     colors.primary = color(192, 38, 211);
     colors.karai = color(185, 28, 28);
     colors.ninja = color(2, 132, 199);
@@ -76,6 +64,12 @@ function setup() {
                 await recorder.download();
             }
         });
+    } else {
+        audio.onended(async () => {
+            if (parseInt(audio.currentTime()) >= parseInt(audio.duration())) {
+                await ending();
+            }
+        });
     }
 }
 
@@ -85,11 +79,9 @@ function setup() {
 function draw() {
     background(0);
 
-    // Energy
+    // p5.js sound
     fft.analyze();
-    amp = fft.getEnergy(20, 200);
-
-    // WaveForm
+    let amp = fft.getEnergy(20, 200);
     let wave = fft.waveform();
 
     // Text
@@ -119,7 +111,7 @@ function draw() {
 
     // Color
     let time = parseFloat(audio.currentTime().toFixed(1));
-    let from = colors[currentColor];
+    let from = colors[colorCurrent];
     let to = null;
     let pct = null;
 
@@ -127,8 +119,8 @@ function draw() {
     if (colorTimeStamps.length > 0) {
         if (time >= colorTimeStamps[0][0] && time <= colorTimeStamps[0][1]) {
             if (time == colorTimeStamps[0][1]) {
-                currentColor = colorTimeStamps[0][2];
-                from = colors[currentColor];
+                colorCurrent = colorTimeStamps[0][2];
+                from = colors[colorCurrent];
                 colorTimeStamps.shift();
             } else {
                 to = colors[colorTimeStamps[0][2]];
@@ -136,10 +128,10 @@ function draw() {
             }
         }
     }
-    usedColor = to ? lerpColor(from, to, pct) : from;
+    colorUsed = to ? lerpColor(from, to, pct) : from;
 
     // Line
-    stroke(usedColor);
+    stroke(colorUsed);
     let duration = parseFloat(audio.duration().toFixed(1));
     let lineWidth = map(time, 0, duration, 0, width);
     line(0, 3, lineWidth, 3);
@@ -167,10 +159,10 @@ function draw() {
 
     // Render Gradients
     let gradient = drawingContext.createRadialGradient(0, 0, 0, 0, 0, 100);
-    gradient.addColorStop(0, `${usedColor.toString()}`);
-    gradient.addColorStop(0.5, `${usedColor.toString()}`);
-    gradient.addColorStop(0.5, `${usedColor.toString().replace('1)', '.2)')}`);
-    gradient.addColorStop(1, `${usedColor.toString().replace('1)', '.2)')}`);
+    gradient.addColorStop(0, `${colorUsed.toString()}`);
+    gradient.addColorStop(0.5, `${colorUsed.toString()}`);
+    gradient.addColorStop(0.5, `${colorUsed.toString().replace('1)', '.2)')}`);
+    gradient.addColorStop(1, `${colorUsed.toString().replace('1)', '.2)')}`);
     drawingContext.fillStyle = gradient;
 
     // Render Circle
@@ -189,7 +181,7 @@ function draw() {
     }
 
     // Draw Circle
-    fill(usedColor);
+    fill(colorUsed);
     circle(-100, -100, 80);
 }
 

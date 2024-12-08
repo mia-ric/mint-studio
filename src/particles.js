@@ -25,9 +25,9 @@ class Particle {
      */
     get color() {
         let c = [
-            usedColor.levels[0],
-            usedColor.levels[1],
-            usedColor.levels[2],
+            colorUsed.levels[0],
+            colorUsed.levels[1],
+            colorUsed.levels[2],
         ];
         return [
             c[0] + Math.min(255 - c[0], random(0, 255 - c[0])),

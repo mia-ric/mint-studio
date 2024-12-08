@@ -87,8 +87,7 @@ class Recorder {
      * Finalize Video Data using ffmpeg.js
      */
     async finalize(blob) {
-        const { createFFmpeg, fetchFile } = FFmpeg;
-        const ffmpeg = createFFmpeg({ log: true });
+        const ffmpeg = FFmpeg.createFFmpeg({ log: true });
         
         let result = false;
         try {
@@ -123,11 +122,12 @@ class Recorder {
         // Download the video 
         const link = document.createElement('a');
         document.body.appendChild(link);
-        link.addEventListener('click', ev => { ev.stopPropagation(); ev.stopImmediatePropagation(); });
         link.style = 'display: none';
         link.href = url;
         link.download = `recording-${now()}.mp4`;
+        link.addEventListener('click', ev => { ev.stopPropagation(); ev.stopImmediatePropagation(); });
         link.click();
         window.URL.revokeObjectURL(url);
+        link.remove();
     }
 }
