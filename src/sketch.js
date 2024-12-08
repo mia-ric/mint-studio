@@ -2,6 +2,7 @@ var recorder = null;
 var audio;
 var fontNormal;
 var fontMedium;
+var endScene = false;
 
 var fft;
 var colors = {}
@@ -70,6 +71,7 @@ function setup() {
         recorder = new Recorder(mediaStream, FRAMES);
         audio.onended(async () => {
             if (parseInt(audio.currentTime()) >= parseInt(audio.duration())) {
+                await ending();
                 await recorder.stop();
                 await recorder.download();
             }
@@ -144,6 +146,7 @@ function draw() {
 
     // Translate the other drawings
     translate(width, height);
+    noStroke();
     
     // Render Particles
     if (audio.isPlaying()) {
@@ -152,10 +155,10 @@ function draw() {
     
     for (let i = Particle.stack.length - 1; i >= 0; i--) {
         let particle = Particle.stack[i];
-        if (particle.edges()) {
-            Particle.stack.splice(1, i);
+        if (!particle.visible()) {
+            Particle.stack.splice(i, 1);
         } else {
-            if (audio.isPlaying()) {
+            if (endScene || audio.isPlaying()) {
                 particle.update(amp > 170);
             }
             particle.render();
@@ -215,4 +218,22 @@ async function mouseClicked(ev) {
         }
         await audio.play();
     }
+}
+
+/**
+ * Ending Scene
+ * @returns 
+ */
+function ending() {
+    endScene = true;
+    return new Promise(res => {
+        function temp() {
+            if (Particle.stack.length == 0) {
+                res();
+            } else {
+                setTimeout(temp, 25);
+            }
+        }
+        setTimeout(temp, 25);
+    });
 }

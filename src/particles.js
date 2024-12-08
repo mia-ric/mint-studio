@@ -15,6 +15,8 @@ class Particle {
         this.velocity = createVector(0, 0);
         this.accuracy = this.position.copy().mult(random(0.0005, 0.00001));
         this.width = random(3, 5);
+
+        this._opacity = 1;
     }
 
     /**
@@ -31,16 +33,30 @@ class Particle {
             c[0] + Math.min(255 - c[0], random(0, 255 - c[0])),
             c[1],
             c[2] + Math.min(255 - c[2], random(0, 255 - c[2])),
-            80
+            80 * this._opacity
         ]
+    }
+
+    /**
+     * Receive Opacity
+     * @returns 
+     */
+    get opacity() {
+        if (endScene) {
+            this._opacity -= 0.01;
+        }
+        return this._opacity;
     }
 
     /**
      * Calculate if the particle is still within the viewport
      * @returns 
      */
-    edges() {
-        return this.position.x > (width * 2) || this.position.y > (height * 2);
+    visible() {
+        return !(this.opacity <= 0
+             || (this.position.x > 200 || this.position.x < -windowWidth)
+             || (this.position.y > 200 || this.position.y < -windowHeight)
+        );
     }
 
     /**
@@ -61,7 +77,6 @@ class Particle {
      * Render Particle
      */
     render() {
-        noStroke();
         fill(this.color);
         ellipse(this.position.x - 100, this.position.y - 100, this.width);
     }
