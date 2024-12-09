@@ -13,13 +13,13 @@ function initialTimestamps() {
             { start: 202.0, end: 216.0, actor: 'narrator' },
             { start: 216.0, end: 221.0, actor: 'karai' },
             { start: 221.0, end: 268.0, actor: 'narrator' }, // <--
-            { start: 268.0, end: 273.0, actor: 'karai' },
-            { start: 273.0, end: 343.0, actor: 'narrator' },
-            { start: 343.0, end: 346.0, actor: 'ninja' },
-            { start: 346.0, end: 349.0, actor: 'narrator' },
-            { start: 349.0, end: 356.0, actor: 'karai' },
-            { start: 356.0, end: 360.0, actor: 'narrator' },
-            { start: 360.0, end: 366.0, actor: 'karai' },
+            { start: 268.0, end: 274.0, actor: 'karai' },
+            { start: 274.0, end: 345.0, actor: 'narrator' },
+            { start: 345.0, end: 347.0, actor: 'ninja' },
+            { start: 347.0, end: 350.0, actor: 'narrator' },
+            { start: 350.0, end: 357.0, actor: 'karai' },
+            { start: 357.0, end: 361.0, actor: 'narrator' },
+            { start: 361.0, end: 366.0, actor: 'karai' },
             { start: 366.0, end: 424.0, actor: 'narrator' },
         ];
     } else {
