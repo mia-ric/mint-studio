@@ -125,6 +125,7 @@ function draw() {
             currentActor = marker.actor;
             from = getActor(marker.actor).color;
         }
+        studio.highlightMarker(marker, time);
     }
     currentColor = to ? lerpColor(from, to, pct) : from;
 
@@ -170,7 +171,6 @@ function draw() {
             let idx = floor(map(i, 0, 180, 0, wave.length -1));
     
             let r = map(wave[idx], -1, 1, 50, 100);
-    
             let x = r * sin(i) * t;
             let y = r * cos(i);
             vertex(x - 100, y - 100);

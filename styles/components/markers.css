@@ -27,6 +27,7 @@
 
 .marker {
     display: flex;
+    position: relative;
     flex-direction: row;
     gap: 4px;
     padding: 0 5px;
@@ -39,7 +40,8 @@
     pointer-events: auto;
 }
 
-.marker:hover {
+.marker:hover,
+.marker.highlighted {
     background-color: rgb(255 255 255 / 1.0);
 }
 
@@ -79,4 +81,14 @@
 .marker button[data-action="delete"]:hover {
     color: rgb(220 38 38);
     background-color: rgb(0 0 0 / 0.1);
+}
+
+.marker .progress {
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    position: absolute;
+    background-color: rgb(var(--primary-color));
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
