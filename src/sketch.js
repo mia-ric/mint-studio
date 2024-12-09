@@ -1,4 +1,5 @@
 var recorder = null;
+var studio = null;
 var fft = null;
 
 // Assets
@@ -8,17 +9,15 @@ var fontMedium;
 
 // Scene Details
 var endScene = false;
-var colors = {}
-var colorCurrent = 'primary';
-var colorUsed =  null;
-var colorTimeStamps = getTimestamps();
+var currentActor = 'narrator';
+var currentMarker = null;
+var currentColor = null;
 
 
 /**
  * Preload Script
  */
 function preload() {
-    /** SoundFile */
     audio = loadSound('assets/media/' + AUDIO_FILE);
 
     // Load Fonts
@@ -26,17 +25,14 @@ function preload() {
     fontMedium = loadFont('assets/fonts/agencyfb_bold.ttf');
 
     // Handle Colors
-    colorUsed = color(0, 0, 0);
-    colors.primary = color(192, 38, 211);
-    colors.karai = color(185, 28, 28);
-    colors.ninja = color(2, 132, 199);
+    currentColor = color(0, 0, 0);
 }
 
 /**
  * Setup Script
  */
 function setup() {
-    createCanvas(RECORDING ? RECORDING_WIDTH : windowWidth, RECORDING ? RECORDING_HEIGHT : windowHeight);
+    createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
     frameRate(FRAMES);
     angleMode(DEGREES);
 
@@ -71,6 +67,9 @@ function setup() {
             }
         });
     }
+
+    // Add Studio
+    studio = new Studio(select('main').elt)
 }
 
 /**
@@ -78,6 +77,7 @@ function setup() {
  */
 function draw() {
     background(0);
+    studio.update();
 
     // p5.js sound
     fft.analyze();
@@ -110,28 +110,26 @@ function draw() {
     strokeWeight(3);
 
     // Color
-    let time = parseFloat(audio.currentTime().toFixed(1));
-    let from = colors[colorCurrent];
+    let time = parseFloat(audio.currentTime().toFixed(2));
+    let from = getActor(currentActor).color;
     let to = null;
     let pct = null;
 
     // Lerp Color
-    if (colorTimeStamps.length > 0) {
-        if (time >= colorTimeStamps[0][0] && time <= colorTimeStamps[0][1]) {
-            if (time == colorTimeStamps[0][1]) {
-                colorCurrent = colorTimeStamps[0][2];
-                from = colors[colorCurrent];
-                colorTimeStamps.shift();
-            } else {
-                to = colors[colorTimeStamps[0][2]];
-                pct = map(time, colorTimeStamps[0][0], colorTimeStamps[0][1], 0, 1);
-            }
+    let marker = studio.getMarker(time);
+    if (marker) {
+        if (time >= marker.start && time <= marker.start+1) {
+            to = getActor(marker.actor).color;
+            pct = map(time, marker.start, marker.start+1, 0, 1);
+        } else if (time >= marker.start+1 && currentActor != marker.actor) {
+            currentActor = marker.actor;
+            from = getActor(marker.actor).color;
         }
     }
-    colorUsed = to ? lerpColor(from, to, pct) : from;
+    currentColor = to ? lerpColor(from, to, pct) : from;
 
     // Line
-    stroke(colorUsed);
+    stroke(currentColor);
     let duration = parseFloat(audio.duration().toFixed(1));
     let lineWidth = map(time, 0, duration, 0, width);
     line(0, 3, lineWidth, 3);
@@ -159,10 +157,10 @@ function draw() {
 
     // Render Gradients
     let gradient = drawingContext.createRadialGradient(0, 0, 0, 0, 0, 100);
-    gradient.addColorStop(0, `${colorUsed.toString()}`);
-    gradient.addColorStop(0.5, `${colorUsed.toString()}`);
-    gradient.addColorStop(0.5, `${colorUsed.toString().replace('1)', '.2)')}`);
-    gradient.addColorStop(1, `${colorUsed.toString().replace('1)', '.2)')}`);
+    gradient.addColorStop(0, `${currentColor.toString()}`);
+    gradient.addColorStop(0.5, `${currentColor.toString()}`);
+    gradient.addColorStop(0.5, `${currentColor.toString().replace('1)', '.2)')}`);
+    gradient.addColorStop(1.0, `${currentColor.toString().replace('1)', '.2)')}`);
     drawingContext.fillStyle = gradient;
 
     // Render Circle
@@ -181,7 +179,7 @@ function draw() {
     }
 
     // Draw Circle
-    fill(colorUsed);
+    fill(currentColor);
     circle(-100, -100, 80);
 }
 
@@ -192,6 +190,7 @@ async function mouseClicked(ev) {
     if (!(ev.target == select('canvas').elt || ev.target.contains(select('canvas').elt))) {
         return;
     }
+    return;
 
     if (audio.isPlaying()) {
         if (RECORDING && recorder.state == 'recording') {

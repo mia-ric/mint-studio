@@ -5,6 +5,11 @@
 const DEBUG = true;
 
 /**
+ * Recording Mode
+ */
+const RECORDING = false;
+
+/**
  * Frames / Second 
  */
 const FRAMES = 30;
@@ -15,16 +20,11 @@ const FRAMES = 30;
 const AUDIO_FILE = '1.00_prolog.mp3';
 
 /**
- * Recording Mode
+ * CAnvas Screen width
  */
-const RECORDING = true;
+const SCREEN_WIDTH = 1280;
 
 /**
- * Recording screen width
+ * Canvas Screen height
  */
-const RECORDING_WIDTH = 1280;
-
-/**
- * Recording screen height
- */
-const RECORDING_HEIGHT = 720;
+const SCREEN_HEIGHT = 720;

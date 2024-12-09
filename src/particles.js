@@ -25,9 +25,9 @@ class Particle {
      */
     get color() {
         let c = [
-            colorUsed.levels[0],
-            colorUsed.levels[1],
-            colorUsed.levels[2],
+            currentColor.levels[0],
+            currentColor.levels[1],
+            currentColor.levels[2],
         ];
         return [
             c[0] + Math.min(255 - c[0], random(0, 255 - c[0])),
@@ -53,9 +53,10 @@ class Particle {
      * @returns 
      */
     visible() {
-        return !(this.opacity <= 0
-             || (this.position.x > 200 || this.position.x < -windowWidth)
-             || (this.position.y > 200 || this.position.y < -windowHeight)
+        return !(
+            this.opacity <= 0
+        || (this.position.x > 200 || this.position.x < -windowWidth)
+        || (this.position.y > 200 || this.position.y < -windowHeight)
         );
     }
 
@@ -64,10 +65,8 @@ class Particle {
      * @param {boolean} faster True to move a bit faster.
      */
     update(faster) {
-        fill(this.color);
         this.velocity.add(this.accuracy);
         this.position.add(this.velocity);
-        
         if (faster) {
             this.position.add(this.velocity / 2);
         }

@@ -1,0 +1,24 @@
+
+.timer {
+    margin: 0 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    padding-top: 1px;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer .first,
+.timer .second,
+.timer .third {
+    font-size: 12px;
+    line-height: 12px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.timer .separator {
+    font-size: 12px;
+    line-height: 12px;
+}

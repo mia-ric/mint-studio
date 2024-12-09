@@ -1,0 +1,81 @@
+
+.studio {
+    --primary-color: 22 163 73;
+}
+
+.studio {
+    inset: 0;
+    z-index: 20;
+    margin: auto;
+    position: absolute;
+    pointer-events: none;
+}
+
+.studio-bar {
+    left: 20px;
+    bottom: 20px;
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    align-items: center;
+    position: absolute;
+    box-shadow: 0 0 2px 2px rgb(0 0 0 / 0.15);
+    background-color: rgb(255 255 255 / 0.5);
+    border-radius: 5px;
+    transition: background-color 200ms ease-in-out;
+}
+
+.studio-bar:hover {
+    background-color: rgb(255 255 255 / 1.0);
+}
+
+.studio-bar button {
+    color: rgb(0 0 0 / 0.5);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(0 0 0 / 0.0);
+    outline: none;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+    transition: background-color 200ms ease-in-out, border-color 200ms ease-in-out, color 200ms ease-in-out;
+    pointer-events: auto;
+}
+
+.studio-bar button:first-child {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.studio-bar button:last-child {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.studio-bar button svg {
+    fill: currentColor;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+}
+
+.studio-bar button[data-action="pause"] svg:first-child {
+    display: none;
+}
+
+.studio-bar button[data-action="play"] svg:last-child {
+    display: none;
+}
+
+.studio-bar:hover button {
+    color: rgb(0 0 0 / 1.0);
+}
+
+.studio-bar button:hover {
+    color: rgb(var(--primary-color));
+    background-color: rgb(0 0 0 / 0.1);
+}

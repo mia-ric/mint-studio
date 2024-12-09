@@ -14,3 +14,11 @@ function now() {
 function wait(ms) {
     return new Promise(res => setTimeout(res, ms));
 }
+
+function getNode(element, tagName) {
+    if (element.localName == tagName) {
+        return element;
+    } else {
+        return element.closest(tagName);
+    }
+}
