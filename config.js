@@ -7,7 +7,7 @@ const DEBUG = true;
 /**
  * Recording Mode
  */
-const RECORDING = false;
+const RECORDING = true;
 
 /**
  * Frames / Second 

@@ -184,34 +184,6 @@ function draw() {
 }
 
 /**
- * Event Mouse Clicked
- */
-async function mouseClicked(ev) {
-    if (!(ev.target == select('canvas').elt || ev.target.contains(select('canvas').elt))) {
-        return;
-    }
-    return;
-
-    if (audio.isPlaying()) {
-        if (RECORDING && recorder.state == 'recording') {
-            if (audio.currentTime() < audio.duration()) {
-                await recorder.pause();
-            }
-        }
-        await audio.pause();
-    } else {
-        if (RECORDING) {
-            if (recorder.state == 'paused') {
-                await recorder.resume();
-            } else {
-                await recorder.start();
-            }
-        }
-        await audio.play();
-    }
-}
-
-/**
  * Ending Scene
  * @returns 
  */
