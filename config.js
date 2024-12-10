@@ -5,11 +5,6 @@
 const DEBUG = true;
 
 /**
- * Recording Mode
- */
-const RECORDING = true;
-
-/**
  * Frames / Second 
  */
 const FRAMES = 30;

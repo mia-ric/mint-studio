@@ -1,14 +1,23 @@
 
 .studio {
-    --primary-color: 22 163 73;
-}
-
-.studio {
     inset: 0;
     z-index: 20;
     margin: auto;
     position: absolute;
     pointer-events: none;
+}
+
+.studio::before {
+    inset: -10px;
+    content: "";
+    position: absolute;
+    border: 4px solid transparent;
+    border-radius: 5px;
+    transition: border-color 200ms ease-in-out;
+}
+
+.studio.is-recording::before {
+    border-color: #dc2626;
 }
 
 .studio-bar {
@@ -22,6 +31,7 @@
     box-shadow: 0 0 2px 2px rgb(0 0 0 / 0.15);
     background-color: rgb(255 255 255 / 0.5);
     border-radius: 5px;
+    pointer-events: auto;
     transition: background-color 200ms ease-in-out;
 }
 
@@ -71,11 +81,24 @@
     display: none;
 }
 
+.studio.is-recording .studio-bar button[data-action="record"] svg:first-child {
+    display: none;
+}
+
+.studio:not(.is-recording) .studio-bar button[data-action="record"] svg:last-child {
+    display: none;
+}
+
 .studio-bar:hover button {
     color: rgb(0 0 0 / 1.0);
 }
 
 .studio-bar button:hover {
     color: rgb(var(--primary-color));
+    background-color: rgb(0 0 0 / 0.1);
+}
+
+.studio-bar button.btn-danger:hover {
+    color: rgb(var(--danger-color));
     background-color: rgb(0 0 0 / 0.1);
 }

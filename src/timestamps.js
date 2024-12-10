@@ -12,7 +12,7 @@ function initialTimestamps() {
             { start: 194.0, end: 202.0, actor: 'karai' },
             { start: 202.0, end: 216.0, actor: 'narrator' },
             { start: 216.0, end: 221.0, actor: 'karai' },
-            { start: 221.0, end: 268.0, actor: 'narrator' }, // <--
+            { start: 221.0, end: 268.0, actor: 'narrator' },
             { start: 268.0, end: 274.0, actor: 'karai' },
             { start: 274.0, end: 345.0, actor: 'narrator' },
             { start: 345.0, end: 347.0, actor: 'ninja' },

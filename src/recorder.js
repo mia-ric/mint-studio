@@ -108,12 +108,45 @@ class Recorder {
     }
 
     /**
+     * Loading State
+     * @param {boolean} state 
+     */
+    loading(state) {
+        if (state) {
+            let loader = document.querySelector('.loading');
+            if (!loader) {
+                loader = document.createElement('DIV');
+                loader.className = 'loader';
+                loader.innerHTML = `
+                    <div class="loader-message">
+                        <svg class="w-64 h-64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 16 16" fill="currentColor"><path fill="currentColor" d="M12.9 3.1c1.3 1.2 2.1 3 2.1 4.9 0 3.9-3.1 7-7 7s-7-3.1-7-7c0-1.9 0.8-3.7 2.1-4.9l-0.8-0.8c-1.4 1.5-2.3 3.5-2.3 5.7 0 4.4 3.6 8 8 8s8-3.6 8-8c0-2.2-0.9-4.2-2.3-5.7l-0.8 0.8z"></path></svg>
+                        <span>Exporting...</span>
+                    </div>
+                `;
+                document.body.append(loader);
+            }
+            if (!loader.classList.contains('visible')) {
+                setTimeout(() => loader.classList.add('visible'), 15);
+            }
+        } else {
+            let loader = document.querySelector('.loading');
+            if (loader) {
+                loader.classList.remove('visible');
+                setTimeout(() => loader.remove(), 300);
+            }
+        }
+    }
+
+    /**
      * Download Video
      */
     async download() {
         if (DEBUG) {
             console.log('[recorder] download');
         }
+        this.loading(true);
+
+        // Finalize Blob
         const blob = await this.finalize(
             new Blob(this.chunks, { 'type' : this.recorder.mimeType })
         );
@@ -129,5 +162,8 @@ class Recorder {
         link.click();
         window.URL.revokeObjectURL(url);
         link.remove();
+
+        // Stop Loading 
+        this.loading(false);
     }
 }

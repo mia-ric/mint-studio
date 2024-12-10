@@ -1,0 +1,34 @@
+
+.marker-timeline {
+    left: 0;
+    right: 0;
+    bottom: -10px;
+    height: 4px;
+    position: absolute;
+    background-color: rgb(var(--gray-color));
+    border-radius: 2px;
+}
+
+.timeline-marker {
+    height: 4px;
+    position: absolute;
+    opacity: 0.35;
+}
+
+.timeline-marker:first-child {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.timeline-marker:first-child {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.timeline-cursor {
+    width: 2px;
+    height: 10px;
+    margin: 8px 0 0 0;
+    position: absolute;
+    background-color: rgb(255 255 255 / .5);
+}

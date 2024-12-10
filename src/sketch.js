@@ -40,36 +40,27 @@ function setup() {
     //@see https://p5js.org/reference/p5.sound/p5.FFT/
     fft = new p5.FFT();
 
-    // Initialize Recorder instance
-    if (RECORDING) {
-        const canvasStream = select('canvas').elt.captureStream(FRAMES);
-        const audioContext = getAudioContext();
-        const audioStream = audioContext.createMediaStreamDestination();
-        audio.connect(audioStream);
-
-        const mediaStream = new MediaStream([
-            ...canvasStream.getVideoTracks(),
-            ...audioStream.stream.getAudioTracks(),
-        ]);
-
-        recorder = new Recorder(mediaStream, FRAMES);
-        audio.onended(async () => {
-            if (parseInt(audio.currentTime()) >= parseInt(audio.duration())) {
-                await ending();
-                await recorder.stop();
-                await recorder.download();
-            }
-        });
-    } else {
-        audio.onended(async () => {
-            if (parseInt(audio.currentTime()) >= parseInt(audio.duration())) {
-                await ending();
-            }
-        });
-    }
-
-    // Add Studio
+    // Initialize Studio
     studio = new Studio(select('main').elt)
+
+    // Initialize Recorder
+    const canvasStream = select('canvas').elt.captureStream(FRAMES);
+    const audioContext = getAudioContext();
+    const audioStream = audioContext.createMediaStreamDestination();
+    audio.connect(audioStream);
+
+    const mediaStream = new MediaStream([
+        ...canvasStream.getVideoTracks(),
+        ...audioStream.stream.getAudioTracks(),
+    ]);
+
+    recorder = new Recorder(mediaStream, FRAMES);
+    audio.onended(async () => {
+        if (parseInt(audio.currentTime()) >= parseInt(audio.duration())) {
+            await ending();
+            await studio.stopRecording();
+        }
+    });
 }
 
 /**
@@ -85,26 +76,30 @@ function draw() {
     let wave = fft.waveform();
 
     // Text
-    noStroke();
-    strokeWeight(0);
-    fill('white');
+    if (audio.currentTime() > 0) {
+        noStroke();
+        strokeWeight(0);
+        fill('white');
 
-    textAlign(LEFT)
-    textFont(fontMedium, 40);
-    text('MINT', 120, 120);
-    
-    textAlign(LEFT)
-    textFont(fontMedium, 100);
-    text('THE FOOT CLAN', 120, 204);
+        textAlign(LEFT)
+        textFont(fontMedium, 40);
+        text('MINT', 120, 120);
+        
+        textAlign(LEFT)
+        textFont(fontMedium, 100);
+        text('THE FOOT CLAN', 120, 204);
 
-    textAlign(RIGHT)
-    textFont(fontMedium, 36);
-    text('A TEENAGE MUTANT NINJA TURTLES', 634, 244);
-    text('FANFICTION', 634, 280);
+        textAlign(RIGHT)
+        textFont(fontMedium, 36);
+        text('A TEENAGE MUTANT NINJA TURTLES', 634, 244);
+        text('FANFICTION', 634, 280);
 
-    textAlign(RIGHT)
-    textFont(fontMedium, 120);
-    text('PROLOG', width - 120, 400);
+        textAlign(RIGHT)
+        textFont(fontMedium, 120);
+        text('PROLOG', width - 120, 400);
+    } else {
+        noStroke();
+    }
 
     // Set Stroke
     strokeWeight(3);

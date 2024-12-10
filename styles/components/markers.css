@@ -1,14 +1,15 @@
 
 .markers {
-    top: 20px;
-    left: 20px;
+    top: 0;
+    left: 0;
     padding-right: 10px;
-    max-height: 400px;
+    max-height: 100%;
     overflow-x: auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
     position: absolute;
+    transform: translateX(-100%);
 }
 
 .markers::-webkit-scrollbar {

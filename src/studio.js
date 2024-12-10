@@ -13,6 +13,12 @@ class Studio {
     playing = false;
 
     /**
+     * Current Recording State
+     * @var {boolean}
+     */
+    recording = false;
+
+    /**
      * Audio Markers
      */
     markers;
@@ -58,6 +64,14 @@ class Studio {
                     <span class="separator">:</span>
                     <span class="third">000.0</span>
                 </div>
+                <button type="button" class="btn-danger" data-action="record">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                        <path fill-rule="evenodd" d="M2 10a8 8 0 1 1 16 0 8 8 0 0 1-16 0Zm6.39-2.908a.75.75 0 0 1 .766.027l3.5 2.25a.75.75 0 0 1 0 1.262l-3.5 2.25A.75.75 0 0 1 8 12.25v-4.5a.75.75 0 0 1 .39-.658Z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                        <path fill-rule="evenodd" d="M2 10a8 8 0 1 1 16 0 8 8 0 0 1-16 0Zm5-2.25A.75.75 0 0 1 7.75 7h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-4.5Z" clip-rule="evenodd" />
+                    </svg>
+                </button>
                 <button type="button" data-action="marker">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
                         <path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 0 0 .281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 1 0 3 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 0 0 2.273 1.765 11.842 11.842 0 0 0 .976.544l.062.029.018.008.006.003ZM10 11.25a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z" clip-rule="evenodd" />
@@ -66,6 +80,7 @@ class Studio {
             </div>
 
             <div class="markers"></div>
+            <div class="marker-timeline" style="width:${SCREEN_WIDTH}px;"></div>
         `;
 
         // Attach Events
@@ -74,6 +89,8 @@ class Studio {
                 btn.addEventListener('click', this.player.bind(this));
             } else if ((btn.dataset.action || '') == 'backward' || (btn.dataset.action || '') == 'forward') {
                 btn.addEventListener('click', this.fast.bind(this));
+            } else if ((btn.dataset.action || '') == 'record') {
+                btn.addEventListener('click', this.record.bind(this));
             } else if ((btn.dataset.action || '') == 'marker') {
                 btn.addEventListener('click', this.marker.bind(this));
             }
@@ -155,8 +172,27 @@ class Studio {
      * Refresh Markers
      */
     refreshMarkers() {
-        let root = this.studio.querySelector('.markers');
+        let timeline = this.studio.querySelector('.marker-timeline');
+        timeline.innerHTML = `<div class="timeline-cursor"></div>`;
 
+        // Set Marker
+        const duration = parseInt(audio.duration());
+        for (const marker of this.markers.values()) {
+            let start = parseInt(marker.start);
+            let startPosition = start == 0 ? 0 : (100 / duration) * start;
+
+            let end = parseInt(marker.end);
+            let endPosition = end >= duration ? 100 : (100 / duration) * end;
+
+            let markerElement = document.createElement('DIV')
+            markerElement.className = 'timeline-marker';
+            markerElement.style.left = `${startPosition}%`;
+            markerElement.style.width = `${endPosition - startPosition}%`;
+            markerElement.style.backgroundColor = `${getActor(marker.actor).color.toString()}`;
+            timeline.append(markerElement);
+        }
+
+        let root = this.studio.querySelector('.markers');
         root.innerHTML = ``;
         for (const marker of this.markers.values()) {
             let startTime = parseInt(marker.start);
@@ -227,6 +263,13 @@ class Studio {
             thirdFloat = `${thirdFloat}.0`;
         }
         third.innerText = `${('000' + thirdFloat).slice(-5)}`;
+
+        let cursor = this.studio.querySelector('.timeline-cursor');
+        if (cursor) {
+            let current = parseInt(audio.currentTime());
+            let duration = parseInt(audio.duration());
+            cursor.style.left = `${100 / duration * current}%`;
+        }
     }
 
     /**
@@ -240,30 +283,69 @@ class Studio {
         ev.preventDefault();
         
         if (button.dataset.action == 'play') {
-            if (RECORDING) {
-                await recorder[recorder.state == 'paused' ? 'resume' : 'start']();
-            }
-            this.playing = true;
-            await audio.play();
+            await this.play();
         } else if (button.dataset.action == 'pause') {
-            if (RECORDING && recorder.state == 'recording' && audio.currentTime() < audio.duration()) {
-                await recorder.pause();
-            }
-            this.playing = false;
-            await audio.pause();
+            await this.pause();
         } else if (button.dataset.action == 'stop') {
-            this.playing = false;
-            Particle.stack = [];
-            await audio.jump(0);
-            await wait(10);
-            await audio.stop();
+            await this.stop();
         }
+    }
 
-        let playPause = ev.target.closest('.studio-bar')?.querySelector('.play-pause');
+    /**
+     * Update PlayerButton
+     */
+    async playerButton() {
+        let playPause = this.studio.querySelector('.play-pause');
         if (this.playing) {
             playPause.dataset.action = 'pause';
         } else {
             playPause.dataset.action = 'play';
+        }
+    }
+
+    /**
+     * Play
+     */
+    async play() {
+        this.playing = true;
+        await audio.play();
+        this.playerButton();
+
+        if (this.recording) {
+            if (recorder.state == 'paused') {
+                this.startRecording();
+            } else {
+                this.resumeRecording();
+            }
+        }
+    }
+    
+    /**
+     * Pause
+     */
+    async pause() {
+        this.playing = false;
+        await audio.pause();
+        this.playerButton();
+
+        if (this.recording) {
+            this.pauseRecording();
+        }
+    }
+
+    /**
+     * Stop
+     */
+    async stop() {
+        this.playing = false;
+        Particle.stack = [];
+        await audio.jump(0);
+        await wait(10);
+        await audio.stop();
+        this.playerButton();
+
+        if (this.recording) {
+            this.stopRecording();
         }
     }
     
@@ -282,6 +364,60 @@ class Studio {
         } else if (button.dataset.action == 'forward') {
             audio.jump(Math.min(audio.currentTime()+2, audio.duration()));
         }
+    }
+
+    /**
+     * Start|Stop Recording
+     */
+    async record(ev) {
+        let button = getNode(ev.target, 'button');
+        if (!button) {
+            return;
+        }
+        ev.preventDefault();
+
+        if (this.recording) {
+            this.stopRecording();
+        } else {
+            this.startRecording();
+        }
+    }
+
+    /**
+     * Start Recording
+     */
+    async startRecording() {
+        this.studio.classList.add('is-recording');
+
+        await recorder.start();
+        await this.play();
+        this.recording = true; // Prevent Looping
+    }
+
+    /**
+     * Pause Recording
+     */
+    async pauseRecording() {
+        await recorder.pause();
+    }
+
+    /**
+     * Pause Recording
+     */
+    async resumeRecording() {
+        await recorder.resume();
+    }
+
+    /**
+     * Stop Recording
+     */
+    async stopRecording() {
+        this.studio.classList.remove('is-recording');
+
+        this.recording = false; // Prevent Looping
+        await this.stop();
+        await recorder.stop();
+        await recorder.download();
     }
 
     /**
