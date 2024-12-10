@@ -1,23 +1,21 @@
 
+#app {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 30;
+    overflow: hidden;
+    position: fixed;
+    pointer-events: none;
+
+}
+
 .studio {
     inset: 0;
     z-index: 20;
     margin: auto;
     position: absolute;
     pointer-events: none;
-}
-
-.studio::before {
-    inset: -10px;
-    content: "";
-    position: absolute;
-    border: 4px solid transparent;
-    border-radius: 5px;
-    transition: border-color 200ms ease-in-out;
-}
-
-.studio.is-recording::before {
-    border-color: #dc2626;
 }
 
 .studio-bar {
@@ -35,7 +33,8 @@
     transition: background-color 200ms ease-in-out;
 }
 
-.studio-bar:hover {
+.studio-bar:hover,
+.studio-bar.is-active {
     background-color: rgb(255 255 255 / 1.0);
 }
 
@@ -54,42 +53,26 @@
     background-color: transparent;
     transition: background-color 200ms ease-in-out, border-color 200ms ease-in-out, color 200ms ease-in-out;
     pointer-events: auto;
-}
-
-.studio-bar button:first-child {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-}
-
-.studio-bar button:last-child {
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-radius: 3px;
 }
 
 .studio-bar button svg {
-    fill: currentColor;
     width: 16px;
     height: 16px;
     pointer-events: none;
 }
 
-.studio-bar button[data-action="pause"] svg:first-child {
-    display: none;
+.studio-bar button svg:not(.icons-tabler-outline) {
+    fill: currentColor;
 }
 
-.studio-bar button[data-action="play"] svg:last-child {
-    display: none;
+.studio-bar button svg.icons-tabler-outline {
+    fill: none;
+    stroke: currentColor;
 }
 
-.studio.is-recording .studio-bar button[data-action="record"] svg:first-child {
-    display: none;
-}
-
-.studio:not(.is-recording) .studio-bar button[data-action="record"] svg:last-child {
-    display: none;
-}
-
-.studio-bar:hover button {
+.studio-bar:hover button,
+.studio-bar.is-active button {
     color: rgb(0 0 0 / 1.0);
 }
 
@@ -101,4 +84,19 @@
 .studio-bar button.btn-danger:hover {
     color: rgb(var(--danger-color));
     background-color: rgb(0 0 0 / 0.1);
+}
+
+.studio-bar button.btn-danger:hover {
+    color: rgb(var(--danger-color));
+    background-color: rgb(0 0 0 / 0.1);
+}
+
+.studio-bar.is-recording button.btn-danger {
+    color: rgb(var(--danger-color));
+    background-color: rgb(var(--danger-color) / 0.1);
+}
+
+.studio-bar.is-recording button.btn-danger:hover {
+    color: rgb(255 255 255);
+    background-color: rgb(var(--danger-color));
 }

@@ -18,6 +18,18 @@ var currentColor = null;
  * Preload Script
  */
 function preload() {
+    loadScript('src/support/functions.js');
+    loadScript('src/support/particles.js');
+    loadScript('src/composables/recorder.js');
+    loadScript('src/composables/studio.js');
+    loadScript('src/components/markers.js');
+    loadScript('src/components/recorder-frame.js');
+    loadScript('src/components/studio.js');
+    loadScript('src/components/studio-bar.js');
+    loadScript('src/data/actors.js');
+    loadScript('src/data/timestamps.js');
+
+    // Load Audio
     audio = loadSound('assets/media/' + AUDIO_FILE);
 
     // Load Fonts
@@ -32,6 +44,21 @@ function preload() {
  * Setup Script
  */
 function setup() {
+    const app = Vue.createApp({
+        setup() {
+            const recorder = useRecorder(audio);
+            const studio = useStudio(audio, recorder);
+            Vue.provide('studio', studio);
+            return { };
+        },
+        template: `<StudioComponent />`
+    });
+    app.component('MarkersComponent', MarkersComponent);
+    app.component('RecorderFrameComponent', RecorderFrameComponent);
+    app.component('StudioBarComponent', StudioBarComponent);
+    app.component('StudioComponent', StudioComponent);
+
+    // Initialize Canvas
     createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
     frameRate(FRAMES);
     angleMode(DEGREES);
@@ -39,28 +66,14 @@ function setup() {
     // Analyse frequency spectrum and waveform of sounds
     //@see https://p5js.org/reference/p5.sound/p5.FFT/
     fft = new p5.FFT();
-
-    // Initialize Studio
-    studio = new Studio(select('main').elt)
-
-    // Initialize Recorder
-    const canvasStream = select('canvas').elt.captureStream(FRAMES);
-    const audioContext = getAudioContext();
-    const audioStream = audioContext.createMediaStreamDestination();
-    audio.connect(audioStream);
-
-    const mediaStream = new MediaStream([
-        ...canvasStream.getVideoTracks(),
-        ...audioStream.stream.getAudioTracks(),
-    ]);
-
-    recorder = new Recorder(mediaStream, FRAMES);
     audio.onended(async () => {
         if (parseInt(audio.currentTime()) >= parseInt(audio.duration())) {
             await ending();
-            await studio.stopRecording();
         }
     });
+
+    // Mount Vue3 application
+    app.mount('#app');
 }
 
 /**
@@ -68,7 +81,7 @@ function setup() {
  */
 function draw() {
     background(0);
-    studio.update();
+    //studio.update();
 
     // p5.js sound
     fft.analyze();
@@ -76,7 +89,7 @@ function draw() {
     let wave = fft.waveform();
 
     // Text
-    if (audio.currentTime() > 0) {
+    if (false && audio.currentTime() > 0) {
         noStroke();
         strokeWeight(0);
         fill('white');
@@ -111,6 +124,7 @@ function draw() {
     let pct = null;
 
     // Lerp Color
+    /*
     let marker = studio.getMarker(time);
     if (marker) {
         if (time >= marker.start && time <= marker.start+1) {
@@ -122,6 +136,7 @@ function draw() {
         }
         studio.highlightMarker(marker, time);
     }
+        */
     currentColor = to ? lerpColor(from, to, pct) : from;
 
     // Line

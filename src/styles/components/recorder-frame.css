@@ -1,0 +1,105 @@
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+.recorder-frame {
+    top: 50%;
+    left: 50%;
+    content: "";
+    z-index: 30;
+    position: absolute;
+    border: 3px solid transparent;
+    border-radius: 10px;
+    transform: translate(-50%, -50%) scale(1.03, 1.05);
+    transition: background-color 200ms ease-in-out, border-color 200ms ease-in-out, box-shadow 200ms ease-in-out;
+    pointer-events: none;
+}
+
+.recorder-frame.is-paused {
+    border-color: rgb(var(--warning-color) / 0.75);
+    box-shadow: 0 0 0 6px rgb(var(--warning-color) / 0.15);
+}
+
+.recorder-frame.is-recording {
+    border-color: rgb(var(--danger-color) / 0.75);
+    box-shadow: 0 0 0 6px rgb(var(--danger-color) / 0.15);
+}
+
+.recorder-frame.is-exporting {
+    background-color: rgb(0 0 0 / 0.25);
+    border-color: rgb(var(--info-color) / 0.75);
+    box-shadow: 
+        0 0 0 6px rgb(var(--info-color) / 0.15),
+        0 0 0 1000px rgb(0 0 0 / 0.25);
+}
+
+.recorder-frame.is-exporting::before {
+    cursor: wait;
+    z-index: 998;
+    inset: -1000px;
+    position: fixed;
+    pointer-events: auto;
+    content: "";
+}
+
+.recorder-badge {
+    top: 30px;
+    right: 30px;
+    color: rgb(255 255 255 / 0.5);
+    display: flex;
+    align-items: center;
+    position: absolute;
+    gap: 10px;
+    font-size: 14px;
+    padding: 7px 15px 7px 12px;
+    border-radius: 6px;
+    background-color: rgb(var(--gray-color) / 0.15);
+    font-weight: 600;
+    text-transform: uppercase;
+    pointer-events: none;
+    transition: background-color 200ms ease-in-out, color 200ms ease-in-out;
+}
+
+.recorder-badge svg {
+    width: 20px;
+    height: 20px;
+    position: relative;
+}
+
+.recorder-badge svg:not(.icons-tabler-outline) {
+    fill: currentColor;
+}
+
+.recorder-badge svg.icons-tabler-outline {
+    fill: none;
+    stroke: currentColor;
+}
+
+.recorder-badge.is-paused {
+    color: rgb(var(--warning-color));
+    background-color: rgb(var(--warning-color) / 0.15);
+}
+
+.recorder-badge.is-recording {
+    color: rgb(var(--danger-color));
+    background-color: rgb(var(--danger-color) / 0.15);
+}
+
+.recorder-badge.is-exporting {
+    color: rgb(255 255 255);
+    background-color: rgb(var(--info-color));
+}
+
+.recorder-badge.is-exporting svg {
+    animation-name: spin;
+    animation-direction:normal;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: steps(8);
+}
