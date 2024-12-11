@@ -1,7 +1,9 @@
 {
     "name": "mint_studio",
-    "description": "",
-    "keywords": [],
+    "description": "This has escalated way too far, way to quickly.",
+    "keywords": [
+        "cowabunga"
+    ],
     "version": "1.0.0",
     "private": true,
     "author": "MIA",
