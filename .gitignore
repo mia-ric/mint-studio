@@ -3,7 +3,7 @@ node_modules
 # Skip Assets
 assets/fonts/*
 !assets/fonts/.gitkeep
-assets/images/*
-!assets/images/.gitkeep
+!assets/icons/*
+!assets/images/*
 assets/media/*
 !assets/media/.gitkeep

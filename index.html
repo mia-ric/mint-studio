@@ -2,17 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>WaveFormStudio</title>
+    <title>MINT - Studio</title>
 
-    <link rel="stylesheet" type="text/css" href="src/styles/sketch.css">
+    <link rel="icon" href="assets/icons/raph.ico" />
+    <link rel="stylesheet" type="text/css" href="src/styles/sketch.css" />
 
     <script src="src/vendors/p5.min.js"></script>
     <script src="src/vendors/p5.sound.min.js"></script>
     <script src="src/plugins/p5.script.js"></script>
     <script src="src/vendors/ffmpeg.min.js"></script>
     <script src="src/vendors/vue.js"></script>
+    <script>
+        const icons = ['don.ico', 'leo.ico', 'mikey.ico', 'raph.ico'];
+        let current = 3;
+        function changeFavicon() {
+            let random = current;
+            while(random === current) {
+                random = Math.floor(Math.random() * 4);
+            }
+            document.head.querySelector('[rel="icon"]').href = `assets/icons/${icons[random]}`;
+            setTimeout(changeFavicon, 10 * 1000);
+        }
+        setTimeout(changeFavicon, 10 * 1000);
+    </script>
 </head>
 <body>
     <div id="app"></div>
