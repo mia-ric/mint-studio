@@ -81,7 +81,6 @@ function setup() {
  */
 function draw() {
     background(0);
-    //studio.update();
 
     // p5.js sound
     fft.analyze();
@@ -124,8 +123,7 @@ function draw() {
     let pct = null;
 
     // Lerp Color
-    /*
-    let marker = studio.getMarker(time);
+    let marker = currentMarker;
     if (marker) {
         if (time >= marker.start && time <= marker.start+1) {
             to = getActor(marker.actor).color;
@@ -134,9 +132,7 @@ function draw() {
             currentActor = marker.actor;
             from = getActor(marker.actor).color;
         }
-        studio.highlightMarker(marker, time);
     }
-        */
     currentColor = to ? lerpColor(from, to, pct) : from;
 
     // Line

@@ -72,6 +72,7 @@ function useStudio(audio, recorder) {
 
         if (recording.value) {
             recorder.reset();
+            recording.value = false;
         }
     }
 
@@ -95,6 +96,18 @@ function useStudio(audio, recorder) {
             await wait(10);
         }
         await audio.jump(Math.min(currentTime.value + 2, audio.duration()));
+    }
+    
+    /**
+     * Jump to a specific point
+     * @param {number} time
+     */
+    async function jumpTo(time) {
+        if (!playing.value) {
+            await play(); // We cannot seamlessly jump without playing.
+            await wait(10);
+        }
+        await audio.jump(Math.min(Math.max(time, 0), audio.duration()));
     }
 
     /**
@@ -136,6 +149,7 @@ function useStudio(audio, recorder) {
         stop,
         backward,
         forward,
+        jumpTo,
         startRecording,
     	stopRecording,
         recorder
