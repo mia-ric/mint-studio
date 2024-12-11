@@ -88,10 +88,13 @@ function draw() {
     let wave = fft.waveform();
 
     // Text
-    if (false && audio.currentTime() > 0) {
+    if (audio.currentTime() > 0) {
+        let current = parseFloat(audio.currentTime().toFixed(2));
+        let opacity = Math.min(current * 30, 255);
+
         noStroke();
         strokeWeight(0);
-        fill('white');
+        fill(color(255, 255, 255, opacity));
 
         textAlign(LEFT)
         textFont(fontMedium, 40);
@@ -187,6 +190,28 @@ function draw() {
     // Draw Circle
     fill(currentColor);
     circle(-100, -100, 80);
+
+    // Draw
+    translate(-width, -height);
+    {
+        let current = parseFloat(audio.currentTime().toFixed(2));
+        let duration = parseFloat(audio.duration().toFixed(2));
+        let opacity = 0.0;
+        if (current > 3.0 && current < 35.0) {
+            opacity = Math.min((current-3) / 10, 0.3);
+        } else if (current > 34.0 && current < (duration - 10.0)) {
+            opacity = 0.3;
+        } else if (current >= duration - 10.0) {
+            opacity = Math.max(0.3 - ((current - (duration - 10.0)) / 10), 0.0);
+        }
+
+        let gradient = drawingContext.createRadialGradient(1280 / 2, 720 / 2, 900, 1280 / 2, 720 / 2, 120);
+        gradient.addColorStop(0, `${currentColor.toString().replace('1)', `${opacity})`)}`);
+        gradient.addColorStop(0.4, `${currentColor.toString().replace('1)', '0.0)')}`);
+        gradient.addColorStop(1.0, `${currentColor.toString().replace('1)', '0.0)')}`);
+        drawingContext.fillStyle = gradient;
+        rect(0, 0, 1280, 720);
+    }
 }
 
 /**

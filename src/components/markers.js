@@ -30,7 +30,6 @@ const MarkersComponent = {
             },
             progress(marker) {
                 let percent = map(studio.currentTime.value, marker.start, marker.end, 0, 100);
-                console.log(percent);
                 return marker.status == 'current' ? `
                     --var-radial: radial-gradient(closest-side, #101214 85%, transparent 0 100%);
                     --var-conic: conic-gradient(${getActor(marker.actor).color.toString()} calc(${percent}%), transparent 0);
