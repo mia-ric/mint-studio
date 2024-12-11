@@ -1,12 +1,9 @@
 {
-    "name": "waveformp5",
-    "version": "1.0.0",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
+    "name": "mint_studio",
+    "description": "",
     "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "description": ""
+    "version": "1.0.0",
+    "private": true,
+    "author": "MIA",
+    "license": "ISC"
 }
