@@ -6,6 +6,10 @@ var fft = null;
 var audio;
 var fontNormal;
 var fontMedium;
+var shurikenVector;
+var shurikenColor = 'rgba(0,0,0,1)';
+var shurikenImage = null;
+var ninjaImage;
 
 // Scene Details
 var endScene = false;
@@ -35,6 +39,10 @@ function preload() {
     // Load Fonts
     fontNormal = loadFont('assets/fonts/agencyfb_regular.ttf');
     fontMedium = loadFont('assets/fonts/agencyfb_bold.ttf');
+
+    // Load Images
+    shurikenVector = loadSVG('assets/images/shuriken.svg');
+    ninjaImage = loadImage('assets/images/ninja.png');
 
     // Handle Colors
     currentColor = color(0, 0, 0);
@@ -87,39 +95,7 @@ function draw() {
     let amp = fft.getEnergy(20, 200);
     let wave = fft.waveform();
 
-    // Text
-    if (audio.currentTime() > 0) {
-        let current = parseFloat(audio.currentTime().toFixed(2));
-        let opacity = Math.min(current * 30, 255);
-
-        noStroke();
-        strokeWeight(0);
-        fill(color(255, 255, 255, opacity));
-
-        textAlign(LEFT)
-        textFont(fontMedium, 40);
-        text('MINT', 120, 120);
-        
-        textAlign(LEFT)
-        textFont(fontMedium, 100);
-        text('THE FOOT CLAN', 120, 204);
-
-        textAlign(RIGHT)
-        textFont(fontMedium, 36);
-        text('A TEENAGE MUTANT NINJA TURTLES', 634, 244);
-        text('FANFICTION', 634, 280);
-
-        textAlign(RIGHT)
-        textFont(fontMedium, 120);
-        text('PROLOG', width - 120, 400);
-    } else {
-        noStroke();
-    }
-
-    // Set Stroke
-    strokeWeight(3);
-
-    // Color
+    // Calculate Color
     let time = parseFloat(audio.currentTime().toFixed(2));
     let from = getActor(currentActor).color;
     let to = null;
@@ -138,62 +114,151 @@ function draw() {
     }
     currentColor = to ? lerpColor(from, to, pct) : from;
 
-    // Line
-    stroke(currentColor);
-    let duration = parseFloat(audio.duration().toFixed(1));
-    let lineWidth = map(time, 0, duration, 0, width);
-    line(0, 3, lineWidth, 3);
-
-    // Translate the other drawings
-    translate(width, height);
-    noStroke();
-    
-    // Render Particles
-    if (audio.isPlaying()) {
-        new Particle;
-    }
-    
-    for (let i = Particle.stack.length - 1; i >= 0; i--) {
-        let particle = Particle.stack[i];
-        if (!particle.visible()) {
-            Particle.stack.splice(i, 1);
-        } else {
-            if (endScene || audio.isPlaying()) {
-                particle.update(amp > 170);
-            }
-            particle.render();
-        }
-    }
-
-    // Render Gradients
-    let gradient = drawingContext.createRadialGradient(0, 0, 0, 0, 0, 100);
-    gradient.addColorStop(0, `${currentColor.toString()}`);
-    gradient.addColorStop(0.5, `${currentColor.toString()}`);
-    gradient.addColorStop(0.5, `${currentColor.toString().replace('1)', '.2)')}`);
-    gradient.addColorStop(1.0, `${currentColor.toString().replace('1)', '.2)')}`);
-    drawingContext.fillStyle = gradient;
-
-    // Render Circle
-    for (let t = -1; t <= 1; t += 2) {
-        beginShape();
-        for (let i = 0; i <= 180; i += 0.5) {
-            let idx = floor(map(i, 0, 180, 0, wave.length -1));
-    
-            let r = map(wave[idx], -1, 1, 50, 100);
-            let x = r * sin(i) * t;
-            let y = r * cos(i);
-            vertex(x - 100, y - 100);
-        }
-        endShape();
-    }
-
-    // Draw Circle
-    fill(currentColor);
-    circle(-100, -100, 80);
-
-    // Draw
-    translate(-width, -height);
+    /**
+     * Draw Text
+     */
+    push();
     {
+        if (time > 0) {
+            let current = parseFloat(audio.currentTime().toFixed(2));
+            let opacity = Math.min(current * 30, 255);
+    
+            noStroke();
+            strokeWeight(0);
+            fill(color(255, 255, 255, opacity));
+    
+            textAlign(LEFT)
+            textFont(fontMedium, 40);
+            text('MINT', 120, 120);
+            
+            textAlign(LEFT)
+            textFont(fontMedium, 100);
+            text('THE FOOT CLAN', 120, 204);
+    
+            textAlign(RIGHT)
+            textFont(fontMedium, 36);
+            text('A TEENAGE MUTANT NINJA TURTLES', 634, 244);
+            text('FANFICTION', 634, 280);
+    
+            textAlign(RIGHT)
+            textFont(fontMedium, 120);
+            text('PROLOG', width - 120, 400);
+        }
+    }
+    pop();
+
+    /**
+     * Render Top-Timeline
+     */
+    push();
+    {
+        if (time > 0) {
+            stroke(currentColor);
+            let duration = parseFloat(audio.duration().toFixed(1));
+            let lineWidth = map(time, 0, duration, 0, width);
+            line(0, 3, lineWidth, 3);
+        }
+    }
+    pop();
+
+    /**
+     * Render Logo
+     */
+    push();
+    {
+        if (time > 0) {
+            let current = parseFloat(audio.currentTime().toFixed(2));
+            let opacity = Math.min(current, 15);
+
+            tint(255, opacity);
+            image(ninjaImage, width / 2 - 200, height / 2 - 224, 400, 448);
+        }
+    }
+
+    /**
+     * Render Particles
+     */
+    push();
+    {
+        translate(width, height);
+        noStroke();
+        
+        // Render Particles
+        if (audio.isPlaying()) {
+            new Particle;
+        }
+        
+        for (let i = Particle.stack.length - 1; i >= 0; i--) {
+            let particle = Particle.stack[i];
+            if (!particle.visible()) {
+                Particle.stack.splice(i, 1);
+            } else {
+                if (endScene || audio.isPlaying()) {
+                    particle.update(amp > 170);
+                }
+                particle.render();
+            }
+        }
+
+        // Render Gradients
+        let gradient = drawingContext.createRadialGradient(0, 0, 0, 0, 0, 100);
+        gradient.addColorStop(0, `${currentColor.toString()}`);
+        gradient.addColorStop(0.5, `${currentColor.toString()}`);
+        gradient.addColorStop(0.5, `${currentColor.toString().replace('1)', '.2)')}`);
+        gradient.addColorStop(1.0, `${currentColor.toString().replace('1)', '.2)')}`);
+        drawingContext.fillStyle = gradient;
+
+        // Render Circle
+        for (let t = -1; t <= 1; t += 2) {
+            beginShape();
+            for (let i = 0; i <= 180; i += 0.5) {
+                let idx = floor(map(i, 0, 180, 0, wave.length -1));
+        
+                let r = map(wave[idx], -1, 1, 50, 100);
+                let x = r * sin(i) * t;
+                let y = r * cos(i);
+                vertex(x - 100, y - 100);
+            }
+            endShape();
+        }
+    }
+    pop();
+
+    /**
+     * Render Shuriken
+     */
+    push();
+    {
+        noStroke();
+        fill(currentColor);
+        //circle(-100, -100, 80);
+
+        if (shurikenImage) {
+            translate(width - 100, height - 100);
+            rotate(time * 12);
+            imageMode(CENTER);
+            drawingContext.drawImage(shurikenImage, -90, -90, 180, 180);
+        }
+
+        if (!shurikenImage || shurikenColor != currentColor.toString()) {
+            let img = new Image;
+            img.onload = () => {
+                shurikenImage = img.cloneNode(true);
+            }
+            img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+                shurikenVector.elt.outerHTML.replace(shurikenColor, currentColor.toString())
+            )}`;
+        }
+    }
+    pop();
+
+    /**
+     * Render Corner Gradient
+     */
+    push();
+    {
+        noStroke();
+
         let current = parseFloat(audio.currentTime().toFixed(2));
         let duration = parseFloat(audio.duration().toFixed(2));
         let opacity = 0.0;
@@ -212,6 +277,7 @@ function draw() {
         drawingContext.fillStyle = gradient;
         rect(0, 0, 1280, 720);
     }
+    pop();
 }
 
 /**
