@@ -19,8 +19,8 @@ var ninjaImage = null;
 // Scene Details
 var endScene = false;
 var currentActor = 'narrator';
-var currentMarker = null;
 var currentColor = null;
+var currentMarker = null;
 
 
 /**
@@ -48,9 +48,6 @@ function preload() {
     // Load Images
     shurikenVector = loadSVG('assets/images/shuriken.svg');
     ninjaVector = loadSVG('assets/images/ninja.svg');
-
-    // Handle Colors
-    currentColor = color(0, 0, 0);
 }
 
 /**
@@ -85,8 +82,9 @@ function setup() {
         }
     });
     
-    // Handle Colors
+    // Initial Current
     currentActor = data.timestamps[0].actor;
+    currentColor = color(0, 0, 0);
     document.addEventListener('player', (ev) => {
         if (ev.detail == 'stop') {
             currentActor = data.timestamps[0].actor;
@@ -229,7 +227,7 @@ function draw() {
 
         // Render Gradients
         let gradient = drawingContext.createRadialGradient(0, 0, 0, 0, 0, 100);
-        gradient.addColorStop(0, `${currentColor.toString()}`);
+        gradient.addColorStop(0.0, `${currentColor.toString()}`);
         gradient.addColorStop(0.5, `${currentColor.toString()}`);
         gradient.addColorStop(0.5, `${currentColor.toString().replace('1)', '.2)')}`);
         gradient.addColorStop(1.0, `${currentColor.toString().replace('1)', '.2)')}`);
