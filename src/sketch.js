@@ -59,6 +59,14 @@ function setup() {
             const recorder = useRecorder(audio);
             const studio = useStudio(audio, recorder);
             Vue.provide('studio', studio);
+
+            document.addEventListener('recording:ended', async () => {
+                if (recorder.state.value == 'recording') {
+                    await wait(1000);
+                    studio.stopRecording();
+                }
+            });
+
             return { };
         },
         template: `<StudioComponent />`
@@ -79,6 +87,7 @@ function setup() {
     audio.onended(async () => {
         if (parseInt(audio.currentTime()) >= parseInt(audio.duration())) {
             await ending();
+            document.dispatchEvent(new CustomEvent('recording:ended'));
         }
     });
     
