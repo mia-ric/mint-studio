@@ -1,9 +1,9 @@
 var recorder = null;
 var studio = null;
 var fft = null;
-var data = null;
 
 // Assets
+var data = null;
 var audio;
 var fontNormal;
 var fontMedium;
@@ -296,7 +296,7 @@ function draw() {
         }
 
         let gradient = drawingContext.createRadialGradient(1280 / 2, 720 / 2, 900, 1280 / 2, 720 / 2, 120);
-        gradient.addColorStop(0, `${currentColor.toString().replace('1)', `${opacity})`)}`);
+        gradient.addColorStop(0.0, `${currentColor.toString().replace('1)', `${opacity})`)}`);
         gradient.addColorStop(0.4, `${currentColor.toString().replace('1)', '0.0)')}`);
         gradient.addColorStop(1.0, `${currentColor.toString().replace('1)', '0.0)')}`);
         drawingContext.fillStyle = gradient;
