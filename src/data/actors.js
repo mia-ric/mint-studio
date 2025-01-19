@@ -23,7 +23,7 @@ function getActors() {
             name: 'Random Ninja',
             color: color(2, 132, 199),
         });
-        actors.set('brian', {
+        actors.set('obrian', {
             name: 'Det. Mark O\'Brian',
             color: color(5, 150, 105),
         });

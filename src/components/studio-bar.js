@@ -30,19 +30,54 @@ const StudioBarComponent = {
             <button type="button" @click="stop">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-player-stop"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 4h-10a3 3 0 0 0 -3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3 -3v-10a3 3 0 0 0 -3 -3z" /></svg>
             </button>
-            <button type="button" @click="backward">
+            <button type="button" @click="prevMarker">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-player-track-prev"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20.341 4.247l-8 7a1 1 0 0 0 0 1.506l8 7c.647 .565 1.659 .106 1.659 -.753v-14c0 -.86 -1.012 -1.318 -1.659 -.753z" /><path d="M9.341 4.247l-8 7a1 1 0 0 0 0 1.506l8 7c.647 .565 1.659 .106 1.659 -.753v-14c0 -.86 -1.012 -1.318 -1.659 -.753z" /></svg>
             </button>
-            <button type="button" @click="forward">
+            <button type="button" @click="nextMarker">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-player-track-next"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 5v14c0 .86 1.012 1.318 1.659 .753l8 -7a1 1 0 0 0 0 -1.506l-8 -7c-.647 -.565 -1.659 -.106 -1.659 .753z" /><path d="M13 5v14c0 .86 1.012 1.318 1.659 .753l8 -7a1 1 0 0 0 0 -1.506l-8 -7c-.647 -.565 -1.659 -.106 -1.659 .753z" /></svg>
             </button>
+
+            <span class="btn-separator"></span>
+
+            <button type="button" @click="() => backward(60)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rewind-backward-60"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.007 16.466a6 6 0 0 0 -4.007 -10.466h-11" /><path d="M7 9l-3 -3l3 -3" /><path d="M12 15.5v3a1.5 1.5 0 0 0 3 0v-3a1.5 1.5 0 0 0 -3 0z" /><path d="M9 14h-2a1 1 0 0 0 -1 1v4a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-2" /></svg>
+            </button>
+            <button type="button" @click="() => backward(30)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rewind-backward-30"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.007 16.466a6 6 0 0 0 -4.007 -10.466h-11" /><path d="M12 15.5v3a1.5 1.5 0 0 0 3 0v-3a1.5 1.5 0 0 0 -3 0z" /><path d="M6 14h1.5a1.5 1.5 0 0 1 0 3h-.5h.5a1.5 1.5 0 0 1 0 3h-1.5" /><path d="M7 9l-3 -3l3 -3" /></svg>
+            </button>
+            <button type="button" @click="() => backward(15)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rewind-backward-15"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 20h2a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-2v-3h3" /><path d="M15 18a6 6 0 1 0 0 -12h-11" /><path d="M5 14v6" /><path d="M7 9l-3 -3l3 -3" /></svg>
+            </button>
+            <button type="button" @click="() => backward(5)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rewind-backward-5"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 18a6 6 0 1 0 0 -12h-11" /><path d="M7 9l-3 -3l3 -3" /><path d="M8 20h2a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-2v-3h3" /></svg>
+            </button>
+            <button type="button" @click="() => forward(5)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rewind-forward-5"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 18a6 6 0 1 1 0 -12h11" /><path d="M13 20h2a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-2v-3h3" /><path d="M17 9l3 -3l-3 -3" /></svg>
+            </button>
+            <button type="button" @click="() => forward(15)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rewind-forward-15"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 9l3 -3l-3 -3" /><path d="M9 18a6 6 0 1 1 0 -12h11" /><path d="M16 20h2a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-2v-3h3" /><path d="M13 14v6" /></svg>
+            </button>
+            <button type="button" @click="() => forward(30)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rewind-forward-30"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5.007 16.478a6 6 0 0 1 3.993 -10.478h11" /><path d="M15 15.5v3a1.5 1.5 0 0 0 3 0v-3a1.5 1.5 0 0 0 -3 0z" /><path d="M17 9l3 -3l-3 -3" /><path d="M9 14h1.5a1.5 1.5 0 0 1 0 3h-.5h.5a1.5 1.5 0 0 1 0 3h-1.5" /></svg>
+            </button>
+            <button type="button" @click="() => forward(60)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rewind-forward-60"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5.007 16.478a6 6 0 0 1 3.993 -10.478h11" /><path d="M15 15.5v3a1.5 1.5 0 0 0 3 0v-3a1.5 1.5 0 0 0 -3 0z" /><path d="M17 9l3 -3l-3 -3" /><path d="M12 14h-2a1 1 0 0 0 -1 1v4a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-2" /></svg>
+            </button>
+
+            <span class="btn-separator"></span>
+
             <div class="timer">
                 <span class="first">{{ currentTimeFormat }}</span>
                 <span class="separator">-</span>
                 <span class="second">{{ durationTimeFormat }}</span>
                 <span class="separator">:</span>
                 <span class="third">{{ currentTimestamp }}</span>
+                <span class="separator">-</span>
+                <span class="third">{{ durationSeconds }}</span>
             </div>
+
+            <span class="btn-separator"></span>
+
             <button type="button" class="btn-danger" @click="startOrStopRecording">
                 <svg v-if="!recording" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-player-record"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 5.072a8 8 0 1 1 -3.995 7.213l-.005 -.285l.005 -.285a8 8 0 0 1 3.995 -6.643z" /></svg>
                 <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-player-stop"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 5m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /></svg>

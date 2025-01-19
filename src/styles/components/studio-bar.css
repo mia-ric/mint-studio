@@ -37,6 +37,14 @@
     border-radius: 3px;
 }
 
+.studio-bar .btn-separator {
+    width: 1px;
+    height: 32px;
+    display: block;
+    margin: 0 5px;
+    background-color: rgb(0 0 0 / 0.2);
+}
+
 .studio-bar button svg {
     width: 16px;
     height: 16px;

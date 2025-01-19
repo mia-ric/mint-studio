@@ -1,15 +1,20 @@
 var recorder = null;
 var studio = null;
 var fft = null;
+var data = null;
 
 // Assets
 var audio;
 var fontNormal;
 var fontMedium;
+
 var shurikenVector;
 var shurikenColor = 'rgba(0,0,0,1)';
 var shurikenImage = null;
-var ninjaImage;
+
+var ninjaVector;
+var ninjaColor = 'rgba(0,0,0,1)';
+var ninjaImage = null;
 
 // Scene Details
 var endScene = false;
@@ -31,10 +36,10 @@ function preload() {
     loadScript('src/components/studio.js');
     loadScript('src/components/studio-bar.js');
     loadScript('src/data/actors.js');
-    loadScript('src/data/timestamps.js');
 
-    // Load Audio
-    audio = loadSound('assets/media/' + AUDIO_FILE);
+    // Load Chapter
+    data = loadJSON(`assets/chapters/${CHAPTER}.json`);
+    audio = loadSound(`assets/media/${CHAPTER}.mp3`);
 
     // Load Fonts
     fontNormal = loadFont('assets/fonts/agencyfb_regular.ttf');
@@ -42,7 +47,7 @@ function preload() {
 
     // Load Images
     shurikenVector = loadSVG('assets/images/shuriken.svg');
-    ninjaImage = loadImage('assets/images/ninja.png');
+    ninjaVector = loadSVG('assets/images/ninja.svg');
 
     // Handle Colors
     currentColor = color(0, 0, 0);
@@ -79,6 +84,14 @@ function setup() {
             await ending();
         }
     });
+    
+    // Handle Colors
+    currentActor = data.timestamps[0].actor;
+    document.addEventListener('player', (ev) => {
+        if (ev.detail == 'stop') {
+            currentActor = data.timestamps[0].actor;
+        }
+    });
 
     // Mount Vue3 application
     app.mount('#app');
@@ -104,10 +117,10 @@ function draw() {
     // Lerp Color
     let marker = currentMarker;
     if (marker) {
-        if (time >= marker.start && time <= marker.start+1) {
+        if (time >= marker.time && time <= marker.time+1) {
             to = getActor(marker.actor).color;
-            pct = map(time, marker.start, marker.start+1, 0, 1);
-        } else if (time >= marker.start+1 && currentActor != marker.actor) {
+            pct = map(time, marker.time, marker.time+1, 0, 1);
+        } else if (time >= marker.time+1 && currentActor != marker.actor) {
             currentActor = marker.actor;
             from = getActor(marker.actor).color;
         }
@@ -133,7 +146,7 @@ function draw() {
             
             textAlign(LEFT)
             textFont(fontMedium, 100);
-            text('THE FOOT CLAN', 120, 204);
+            text(data.title.toUpperCase(), 120, 204);
     
             textAlign(RIGHT)
             textFont(fontMedium, 36);
@@ -142,7 +155,7 @@ function draw() {
     
             textAlign(RIGHT)
             textFont(fontMedium, 120);
-            text('PROLOG', width - 120, 400);
+            text(data.chapter.toUpperCase(), width - 120, 400);
         }
     }
     pop();
@@ -168,10 +181,24 @@ function draw() {
     {
         if (time > 0) {
             let current = parseFloat(audio.currentTime().toFixed(2));
-            let opacity = Math.min(current, 15);
+            let opacity = Math.min(current, 15) / 255;
 
-            tint(255, opacity);
-            image(ninjaImage, width / 2 - 200, height / 2 - 224, 400, 448);
+            if (ninjaImage) {
+                imageMode(CENTER);
+                drawingContext.globalAlpha = opacity;
+                drawingContext.drawImage(ninjaImage, width / 2 - 250, height / 2 - 280, 500, 560);
+                drawingContext.globalAlpha = 1;
+            }
+            
+            if (!ninjaImage || ninjaColor != currentColor.toString()) {
+                let img = new Image;
+                img.onload = () => {
+                    ninjaImage = img.cloneNode(true);
+                }
+                img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+                    ninjaVector.elt.outerHTML.replace(ninjaColor, currentColor.toString())
+                )}`;
+            }
         }
     }
 

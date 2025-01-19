@@ -10,12 +10,13 @@ const DEBUG = true;
 const FRAMES = 30;
 
 /**
- * Audio File to Record
+ * Desired Chapter to Record
+ * assets/chapters/<name>.json  (must be the same as assets/media/<name>.mp3)
  */
-const AUDIO_FILE = '1.00_prolog.mp3';
+const CHAPTER = '1.00_prolog';
 
 /**
- * CAnvas Screen width
+ * Canvas Screen width
  */
 const SCREEN_WIDTH = 1280;
 

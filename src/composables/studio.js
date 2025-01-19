@@ -22,9 +22,52 @@ function useStudio(audio, recorder) {
         let startSeconds = startTime > 0 ? startTime - (startMinutes * 60) : 0;
         return `${('00' + startMinutes.toString()).slice(-2)}:${('00' + startSeconds.toString()).slice(-2)}`;
     });
+    const durationSeconds = Vue.computed(() => {
+        return duration.value.toFixed(1);
+    });
 
     // Current Time Watcher
     setInterval(() => { currentTime.value = audio.currentTime(); }, 50);
+
+    // Keep Markers
+    const markers = Vue.reactive(clone(data.timestamps, (el, idx) => {
+        el.status = idx == 0 ? 'current' : 'next';
+        return el; 
+    }));
+
+    // Current Marker
+    const marker = Vue.ref(markers[0]);
+    const markerIdx = Vue.ref(0);
+
+    // Toggle current marker
+    Vue.watch(currentTime, (time) => {
+        for (let i = 0, l = markers.length; i < l; i++) {
+            if (time >= markers[i].time) {
+                if (time <= (markers[i+1]?.time || durationSeconds.value)) {
+                    markers[i].status = 'current';
+                } else {
+                    markers[i].status = 'finished';
+                }
+            } else {
+                markers[i].status = 'next';
+            }
+        }
+    });
+
+    // Assign current marker
+    Vue.watch(markers, (newValue) => {
+        marker.value = currentMarker = markers.find(item => item.status == 'current');
+        markerIdx.value = markers.findIndex(item => item.status == 'current');
+    }, { immediate: true });
+
+    /**
+     * Trigger Event
+     * @param {string} event 
+     */
+    function triggerEvent(event) {
+        const playerEvent = new CustomEvent('player', { detail: event });
+        document.dispatchEvent(playerEvent);
+    }
 
     /**
      * Play Audio
@@ -38,6 +81,7 @@ function useStudio(audio, recorder) {
         if (recording.value && recorder.state.value == 'paused') {
             recorder.resume();
         }
+        triggerEvent('play');
     }
     
     /**
@@ -52,6 +96,7 @@ function useStudio(audio, recorder) {
         if (recording.value && recorder.state.value == 'recording') {
             recorder.pause();
         }
+        triggerEvent('pause');
     }
     
     /**
@@ -74,28 +119,59 @@ function useStudio(audio, recorder) {
             recorder.reset();
             recording.value = false;
         }
+        triggerEvent('stop');
     }
 
     /**
-     * Fast-Backwards
+     * Go to Previous Marker
      */
-    async function backward() {
+    async function prevMarker() {
+        let marker = markerIdx.value == 0 ? null : markers[markerIdx.value-1];
+        let time = marker ? marker.time : 0;
+
         if (!playing.value) {
             await play(); // We cannot seamlessly jump without playing.
             await wait(10);
         }
-        await audio.jump(Math.max(currentTime.value - 2, 0));
+        await audio.jump(time);
+    }
+
+    /**
+     * Go to next Marker
+     */
+    async function nextMarker() {
+        let marker = markerIdx.value >= (markers.length-1) ? null : markers[markerIdx.value+1];
+        let time = marker ? marker.time : (parseFloat(durationSeconds.value)-0.1);
+
+        if (!playing.value) {
+            await play(); // We cannot seamlessly jump without playing.
+            await wait(10);
+        }
+        await audio.jump(time);
+    }
+    
+    /**
+     * Fast-Backwards
+     * @param {number} time
+     */
+    async function backward(time) {
+        if (!playing.value) {
+            await play(); // We cannot seamlessly jump without playing.
+            await wait(10);
+        }
+        await audio.jump(Math.max(currentTime.value - time, 0));
     }
     
     /**
      * Fast-Forwards
+     * @param {number} time
      */
-    async function forward() {
+    async function forward(time) {
         if (!playing.value) {
             await play(); // We cannot seamlessly jump without playing.
             await wait(10);
         }
-        await audio.jump(Math.min(currentTime.value + 2, audio.duration()));
+        await audio.jump(Math.min(currentTime.value + time, audio.duration()));
     }
     
     /**
@@ -144,9 +220,14 @@ function useStudio(audio, recorder) {
         currentTimestamp,
         currentTimeFormat,
         durationTimeFormat,
+        durationSeconds,
+        markers,
+        marker,
         play,
         pause,
         stop,
+        prevMarker,
+        nextMarker,
         backward,
         forward,
         jumpTo,

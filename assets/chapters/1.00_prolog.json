@@ -1,0 +1,21 @@
+{
+    "title": "The Foot Clan",
+    "chapter": "Prolog",
+    "timestamps": [
+        { "time":   0.0, "actor": "narrator" },
+        { "time": 252.0, "actor": "karai" },
+        { "time": 259.0, "actor": "narrator" },
+        { "time": 275.0, "actor": "karai" },
+        { "time": 281.0, "actor": "narrator" },
+        { "time": 302.0, "actor": "karai" },
+        { "time": 308.0, "actor": "narrator" },
+        { "time": 373.0, "actor": "karai" },
+        { "time": 377.0, "actor": "narrator" },
+        { "time": 466.0, "actor": "ninja" },
+        { "time": 468.0, "actor": "narrator" },
+        { "time": 475.0, "actor": "karai" },
+        { "time": 479.0, "actor": "narrator" },
+        { "time": 489.0, "actor": "karai" },
+        { "time": 493.0, "actor": "narrator" }
+    ]
+}
