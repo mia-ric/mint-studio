@@ -13,7 +13,7 @@ const FRAMES = 30;
  * Desired Chapter to Record
  * assets/chapters/<name>.json  (must be the same as assets/media/<name>.mp3)
  */
-const CHAPTER = '1.00_prolog';
+const CHAPTER = '1.02_chapter_2';
 
 /**
  * Canvas Screen width

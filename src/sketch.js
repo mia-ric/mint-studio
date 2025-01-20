@@ -62,7 +62,7 @@ function setup() {
 
             document.addEventListener('recording:ended', async () => {
                 if (recorder.state.value == 'recording') {
-                    await wait(1000);
+                    await wait(2500);
                     studio.stopRecording();
                 }
             });

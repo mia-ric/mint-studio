@@ -1,0 +1,24 @@
+{
+    "title": "The Foot Clan",
+    "chapter": "Kapitel 2",
+    "timestamps": [
+        { "time":   0.0, "actor": "narrator" },
+        { "time": 718.0, "actor": "karai" },
+        { "time": 720.0, "actor": "narrator" },
+        { "time": 747.0, "actor": "karai" },
+        { "time": 751.0, "actor": "narrator" },
+        { "time": 756.0, "actor": "karai" },
+        { "time": 760.0, "actor": "narrator" },
+        { "time": 855.0, "actor": "karai" },
+        { "time": 867.0, "actor": "narrator" },
+        { "time": 886.0, "actor": "karai" },
+        { "time": 890.0, "actor": "narrator" },
+        { "time": 894.0, "actor": "karai" },
+        { "time": 909.0, "actor": "narrator" },
+        { "time": 924.0, "actor": "karai" },
+        { "time": 927.0, "actor": "narrator" },
+        { "time": 932.0, "actor": "karai" },
+        { "time": 945.0, "actor": "narrator" },
+        { "time": 950.0, "actor": "karai" }
+    ]
+}
