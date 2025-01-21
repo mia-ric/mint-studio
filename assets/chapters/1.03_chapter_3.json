@@ -1,0 +1,25 @@
+{
+    "title": "The Foot Clan",
+    "chapter": "Kapitel 3",
+    "timestamps": [
+        { "time":   0.0, "actor": "narrator" },
+        { "time":  95.0, "actor": "karai" },
+        { "time":  98.0, "actor": "narrator" },
+        { "time": 336.0, "actor": "bridge" },
+        { "time": 339.0, "actor": "narrator" },
+        { "time": 400.0, "actor": "bridge" },
+        { "time": 403.0, "actor": "narrator" },
+        { "time": 418.0, "actor": "bridge" },
+        { "time": 420.0, "actor": "narrator" },
+        { "time": 626.0, "actor": "bridge" },
+        { "time": 628.0, "actor": "narrator" },
+        { "time": 636.0, "actor": "bridge" },
+        { "time": 641.0, "actor": "narrator" },
+        { "time": 653.0, "actor": "bridge" },
+        { "time": 655.0, "actor": "narrator" },
+        { "time": 678.0, "actor": "bridge" },
+        { "time": 682.0, "actor": "narrator" },
+        { "time": 688.0, "actor": "bridge" },
+        { "time": 690.0, "actor": "narrator" }
+    ]
+}

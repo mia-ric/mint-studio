@@ -9,23 +9,27 @@ function getActors() {
     if (actors.size == 0) {
         actors.set('narrator', {    // The Narrator-Voice of the first story only.
             name: 'Narrator',
-            color: color(192, 38, 211),
+            color: color(192, 38, 211),     // Violet
         });
         actors.set('rey', {         // Rey, the same as the narrator-voice in the first story (there is no 'narrator' starting with second story)
             name: 'Rey',
-            color: color(192, 38, 211),
+            color: color(192, 38, 211),     // Violet
         });
         actors.set('karai', {
             name: 'Oroku Karai',
-            color: color(185, 28, 28),
+            color: color(185, 28, 28),      // Red
         });
         actors.set('ninja', {
             name: 'Random Ninja',
-            color: color(2, 132, 199),
+            color: color(2, 132, 199),      // Blue
         });
         actors.set('obrian', {
             name: 'Det. Mark O\'Brian',
-            color: color(5, 150, 105),
+            color: color(5, 150, 105),      // Green
+        });
+        actors.set('bridge', {
+            name: 'Bridge',
+            color: color(101, 163, 13),     // Lime
         });
 
         // Missing (No Voice Actors yet)
