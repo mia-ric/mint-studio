@@ -31,6 +31,10 @@ function getActors() {
             name: 'Bridge',
             color: color(101, 163, 13),     // Lime
         });
+        actors.set('random', {
+            name: 'Random Statisten',
+            color: color(100, 116, 139),    // Slate
+        });
 
         // Missing (No Voice Actors yet)
         actors.set('saki', {

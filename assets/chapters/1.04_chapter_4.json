@@ -1,0 +1,9 @@
+{
+    "title": "The Foot Clan",
+    "chapter": "Kapitel 4",
+    "timestamps": [
+        { "time":   0.0, "actor": "narrator" },
+        { "time": 902.0, "actor": "random" },
+        { "time": 905.0, "actor": "narrator" }
+    ]
+}
