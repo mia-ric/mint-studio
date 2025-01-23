@@ -3,7 +3,7 @@
     "chapter": "Kapitel 4",
     "timestamps": [
         { "time":   0.0, "actor": "narrator" },
-        { "time": 905.0, "actor": "random" },
-        { "time": 907.0, "actor": "narrator" }
+        { "time": 904.0, "actor": "random" },
+        { "time": 906.0, "actor": "narrator" }
     ]
 }
