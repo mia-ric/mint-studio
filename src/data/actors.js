@@ -35,6 +35,18 @@ function getActors() {
             name: 'Random Statisten',
             color: color(100, 116, 139),    // Slate
         });
+        actors.set('sira', {
+            name: 'Sira',
+            color: color(219, 39, 119),     // Pink
+        });
+        actors.set('yamamoto', {
+            name: 'Yamamoto Ryu',
+            color: color(6, 182, 212),      // Cyan
+        });
+        actors.set('tanaka', {
+            name: 'Tanaka Hiroshi',
+            color: color(82, 82, 91),       // Dark Zinc
+        });
 
         // Missing (No Voice Actors yet)
         actors.set('saki', {
@@ -47,10 +59,6 @@ function getActors() {
         });
         actors.set('jennika', {
             name: 'Jennika',
-            color: color(0, 0, 0),
-        });
-        actors.set('sira', {
-            name: 'Sira',
             color: color(0, 0, 0),
         });
         actors.set('angel', {

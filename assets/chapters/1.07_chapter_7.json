@@ -1,0 +1,31 @@
+{
+    "title": "The Foot Clan",
+    "chapter": "Kapitel 7",
+    "timestamps": [
+        { "time":    0.0, "actor": "narrator" },
+        { "time":  317.0, "actor": "sira" },
+        { "time":  319.0, "actor": "narrator" },
+        { "time":  322.0, "actor": "sira" },
+        { "time":  324.0, "actor": "narrator" },
+        { "time":  345.0, "actor": "sira" },
+        { "time":  347.0, "actor": "narrator" },
+        { "time":  464.0, "actor": "random" },
+        { "time":  466.0, "actor": "narrator" },
+        { "time":  534.0, "actor": "yamamoto" },
+        { "time":  540.0, "actor": "narrator" },
+        { "time":  571.0, "actor": "sira" },
+        { "time":  574.0, "actor": "narrator" },
+        { "time":  587.0, "actor": "yamamoto" },
+        { "time":  589.0, "actor": "narrator" },
+        { "time":  594.0, "actor": "yamamoto" },
+        { "time":  597.0, "actor": "narrator" },
+        { "time":  529.0, "actor": "yamamoto" },
+        { "time":  530.0, "actor": "narrator" },
+        { "time":  651.0, "actor": "yamamoto" },
+        { "time":  654.0, "actor": "narrator" },
+        { "time":  665.0, "actor": "yamamoto" },
+        { "time":  680.0, "actor": "narrator" },
+        { "time":  722.0, "actor": "tanaka" },
+        { "time":  733.0, "actor": "narrator" }
+    ]
+}
