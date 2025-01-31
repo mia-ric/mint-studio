@@ -13,7 +13,7 @@ const FRAMES = 30;
  * Desired Chapter to Record
  * assets/chapters/<name>.json  (must be the same as assets/media/<name>.mp3)
  */
-const CHAPTER = '1.05_chapter_5';
+const CHAPTER = '1.06_chapter_6';
 
 /**
  * Canvas Screen width
