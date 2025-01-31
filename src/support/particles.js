@@ -17,6 +17,9 @@ class Particle {
         this.width = random(3, 5);
 
         this._opacity = 1;
+
+        this._randomizer = [0, 0, 0];
+        this._randomizerCheck = 0;
     }
 
     /**
@@ -29,10 +32,17 @@ class Particle {
             currentColor.levels[1],
             currentColor.levels[2],
         ];
+
+        if (c[0] + c[1] + c[2] !== this._randomizerCheck) {
+            this._randomizer[0] = Math.min(255 - c[0], random(0, 255 - c[0]));
+            this._randomizer[2] = Math.min(255 - c[2], random(0, 255 - c[2]));
+            this._randomizerCheck = c[0] + c[1] + c[2];
+        }
+
         return [
-            c[0] + Math.min(255 - c[0], random(0, 255 - c[0])),
-            c[1],
-            c[2] + Math.min(255 - c[2], random(0, 255 - c[2])),
+            c[0] + this._randomizer[0],
+            c[1] + this._randomizer[1],
+            c[2] + this._randomizer[2],
             80 * this._opacity
         ]
     }

@@ -8,7 +8,8 @@ function useStudio(audio, recorder) {
     // Special Formats
     const currentTimestamp = Vue.computed(() => {
         let value = currentTime.value.toFixed(1);
-        return ('000' + (value.includes('.') ? value : `${value}.0`)).slice(-5);
+        let length = parseInt(duration.value).toString().length+2;
+        return ('0'.repeat(length) + (value.includes('.') ? value : `${value}.0`)).slice(-length);
     });
     const currentTimeFormat = Vue.computed(() => {
         let startTime = parseInt(currentTime.value);
